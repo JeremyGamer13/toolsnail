@@ -1,0 +1,194 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+    <head>
+        <title>Toolsnail</title>
+        <link rel="icon" type="image/x-icon" href="/images/?image=wrench">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <link href="siteStyling/prism/css" rel="stylesheet" />
+        <style>
+            body {
+                background-image: url(/images/?image=sitebg);
+                background-repeat:no-repeat;
+                background-size:cover;
+            }
+            .whiteBox {
+                background-color: white;
+                padding: 20px;
+                border-radius: 25px;
+                width: 65%;
+            }
+            .errorBox {
+                background-color: red;
+                padding: 20px;
+                border-radius: 25px;
+                width: 85%;
+            }
+            .toolDiv {
+                background-color: rgb(253, 188, 255);
+                padding: 20px;
+                border-radius: 25px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .generalBoxDiv {
+                padding: 20px;
+                border-radius: 25px;
+            }
+            .pixel-text {
+                font-family: 'Press Start 2P', cursive !important; 
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <img src="/images/?image=logo" class="pixel-text" width="600" alt="ToolsnAIl 🔧" style="color:white;margin-top: 2%">
+            <noscript>
+                <!-- if javascript is disabled, display a red box at the top of the page warning that its off -->
+                <div class="errorBox" style="margin-top: 8%;">
+                    <h1 class="pixel-text" style="color:white"><span>Toolsn</span><span style="color:orange">AI</span><span>l may not function correctly without JavaScript enabled! Please go into your site settings and enable it.</span></h1>
+                </div>
+            </noscript>
+            <div class="whiteBox" style="margin-top: 8%;">
+                <h1 class="pixel-text">Snailax LVL to JSON</h1>
+                <p class="pixel-text">Convert a level made in the mod <a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a> to a JSON file.</p>
+                <textarea class="pixel-text" id="levelCode" rows="4" cols="50" placeholder="Insert your level's code here..."></textarea><br>
+                <label class="pixel-text" for="jsonOutputLevelFormat">JSON Level Format:</label>
+                <select class="pixel-text" id="jsonOutputLevelFormat">
+                    <option value="snailax">Snailax</option>
+                    <!--<option value="leveleditor">Ingame Level Editor</option>-->
+                </select><br>
+                <button class="pixel-text" onclick="startConverting()" type="button" id="startConverting" style="background-color:dodgerblue;color: white;font-size: large;">Convert</button>
+                <br>
+                <p class="pixel-text">Converted JSON:</p>
+                <button class="pixel-text" onclick="copyToClipboard()" type="button" id="copyToClipboard" style="background-color:dodgerblue;color: white;font-size: large;">Copy</button>
+                <button class="pixel-text" onclick="downloadAsFile()" type="button" id="downloadAsFile" style="background-color:dodgerblue;color: white;font-size: large;">Download</button>
+                <div>
+                    <small><br>
+                        <pre class="language-json"><code id="exportedJsonElement" class="language-json pixel-text" style="font-size:75%">{}</code></pre>
+                        <br><br>
+                    </small>
+                </div>
+                <br>
+                <br>
+                <!-- box footer for epic credits!! -->
+                <small class="pixel-text"><a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a>: <a style="color: Blue;" href="https://github.com/benjaminpants/">MissingTextureMan101</a></small>
+                <!-- <small class="pixel-text" style="color:DodgerBlue">Credits to <a style="color: DodgerBlue;" href="https://github.com/">Username</a> for Reason</small> -->
+            </div>
+        </center>
+        <!-- the script for highlighting the JSON -->
+        <script src="siteStyling/prism/js"></script>
+        <!-- scripts to run when we want to start converting the level -->
+        <script>
+            function startConverting() {
+                let element = document.getElementById("exportedJsonElement")
+                element.innerText = "{}"
+                let input = document.getElementById("levelCode").value
+                let dropdownelement = document.getElementById("jsonOutputLevelFormat");
+                let format = dropdownelement.options[dropdownelement.selectedIndex].value;
+                let output = {}
+                console.log("Converting Level Data to JSON format", format)
+                // level parser which puts everything into an object
+                let nodes = ["obj_antenna", "obj_antenna_floaty", "obj_antenna_big_range", "obj_power_generator"]
+                let rotatable = ["obj_squasher", "obj_underwater_current", "obj_fish", "obj_door"]
+                let options = (input.slice(0, input.lastIndexOf('|'))).split("\n")
+                if (Number(options.shift()) != 5) {
+                    alert("This Snailax level is not compatible with the level parser. Please re-open the level in Snailax and save it again.")
+                    return
+                }
+                output.objects = []
+                output.options = {}
+                output.options.ground_spike_probability = Number(options.shift())
+                output.options.wall_spike_probability = Number(options.shift())
+                output.options.ceiling_spike_probability = Number(options.shift())
+                output.options.air_cat_probability = Number(options.shift())
+                output.options.badball_probability = Number(options.shift())
+                output.options.squid_disabled = (Number(options.shift()) == 1)
+                output.options.ice_spike_falling_probability = Number(options.shift())
+                output.options.fireworks_probability = Number(options.shift())
+                output.options.conveyor_change_probability = Number(options.shift())
+                output.options.laser_probability = Number(options.shift())
+                output.options.room_xscale = Number(options.shift())
+                output.options.room_yscale = Number(options.shift())
+                output.options.song = Number(options.shift())
+                output.options.theme = Number(options.shift())
+                let reading = (input.slice(input.lastIndexOf('-') + 2, input.length)).split("\n")
+                // bruh :skull: output.content = reading
+                reading.forEach(line => {
+                    if (!(line == null || line == "")) {
+                        let subObject = {}
+                        let editedLine = line
+                        let lineName = line.slice(0, line.indexOf(':'))
+                        if (lineName == "") lineName = null
+                        editedLine = editedLine.slice(editedLine.indexOf(':') + 1, editedLine.length)
+                        let lineX = Number(editedLine.slice(0, editedLine.indexOf(',')))
+                        editedLine = editedLine.slice(editedLine.indexOf(',') + 1, editedLine.length)
+                        let lineY = Number(editedLine.slice(0, editedLine.indexOf(',')))
+                        editedLine = editedLine.slice(editedLine.indexOf(',') + 1, editedLine.length)
+                        let rotOrCorrupt = Number(editedLine.slice(0, editedLine.indexOf(',')))
+                        editedLine = editedLine.slice(editedLine.indexOf(',') + 1, editedLine.length)
+                        let doorHeightOrNull = Number(editedLine.slice(0, editedLine.indexOf(',')))
+                        editedLine = editedLine.slice(editedLine.indexOf(',') + 1, editedLine.length)
+                        let rotation = null
+                        let doorHeight = null
+                        let corrupted = null
+                        if (rotatable.includes(lineName)) {
+                            rotation = rotOrCorrupt
+                        }
+                        if (nodes.includes(lineName)) {
+                            corrupted = (rotOrCorrupt == 1)
+                        }
+                        if (lineName == "obj_door") {
+                            doorHeight = doorHeightOrNull
+                        }
+                        subObject.name = lineName
+                        subObject.x = lineX
+                        subObject.y = lineY
+                        subObject.rotation = rotation
+                        subObject.doorHeight = doorHeight
+                        subObject.corrupted = corrupted
+                        output.objects.push(subObject)
+                    }
+                });
+                if (format == "leveleditor") {
+                    // level editor JSON uses a different format so we change the object to match it
+                    output.options = {
+                        "room_width": Math.round(output.options.room_xscale * 1920),
+                        "room_height": Math.round(output.options.room_xscale * 1080),
+                        "quick_slots": [
+                            "player",
+                            "wall",
+                            "wall_gl",
+                            "spike",
+                            "spike_thn",
+                            "door",
+                            "antenna",
+                            "trigg_ai",
+                            "property_picker_tool",
+                            "delete_tool"
+                        ]
+                    }
+                    output.wires = {"amount": 0}
+                }
+                element.innerText = JSON.stringify(output)
+                element.innerHTML = Prism.highlight(element.innerText, Prism.languages.json, 'json');
+            }
+            function copyToClipboard() {
+                navigator.clipboard.writeText(document.getElementById("exportedJsonElement").innerText)
+            }
+            function downloadAsFile() {
+                let element = document.createElement('a');
+                let text = document.getElementById("exportedJsonElement").innerText
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                let dropdownelement = document.getElementById("jsonOutputLevelFormat");
+                let format = dropdownelement.options[dropdownelement.selectedIndex].value;
+                element.setAttribute('download', `snailax_${format}.json`);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+    <!-- this is the / page of Toolsnail -->
+    <head>
+        <title>Toolsnail</title>
+        <link rel="icon" type="image/x-icon" href="/images/?image=wrench">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <style>
+            body {
+                background-image: url(/images/?image=sitebg);
+                background-repeat:no-repeat;
+                background-size:cover;
+            }
+            .whiteBox {
+                background-color: white;
+                padding: 20px;
+                border-radius: 25px;
+                width: 65%;
+            }
+            .errorBox {
+                background-color: red;
+                padding: 20px;
+                border-radius: 25px;
+                width: 85%;
+            }
+            .toolDiv {
+                background-color: rgb(253, 188, 255);
+                padding: 20px;
+                border-radius: 25px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .generalBoxDiv {
+                padding: 20px;
+                border-radius: 25px;
+            }
+            .pixel-text {
+                font-family: 'Press Start 2P', cursive;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <img src="/images/?image=logo" class="pixel-text" width="600" alt="ToolsnAIl 🔧" style="color:white;margin-top: 2%">
+            <div class="whiteBox" style="margin-top: 8%;">
+                <h1 class="pixel-text"><span>Welcome to Toolsn</span><span style="color:orange">AI</span><span>l!</span></h1>
+                <p class="pixel-text">The site for all of <a style="color: DodgerBlue;" href="https://github.com/JeremyGamer13">Jeremy</a>'s tools that have been created for <a style="color: DodgerBlue;" href="https://store.steampowered.com/app/1115050/Will_You_Snail/">Will You Snail</a>.</p>
+                <div name="toolsGoHere" style="display: inline">
+                <!-- snail tools here !! -->
+                <div name="snailaxToJson" class="toolDiv" style="width: 25%;">
+                    <p style="font-size: 150%" class="pixel-text">Snailax LVL to JSON</p>
+                    <p class="pixel-text">Convert a level made in the mod <a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a> to a JSON file.</p>
+                    <a href="snailaxToJson"><div name="RedirectButton" class="generalBoxDiv" style="width: 85%;background-color: rgb(249, 66, 255);"></div></a><br>
+                    <small class="pixel-text"><a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a>: <a style="color: Blue;" href="https://github.com/benjaminpants/">MissingTextureMan101</a></small>
+                </div>
+                <!--<div name="leveleditorToJson" class="toolDiv" style="width: 25%;">
+                    <p style="font-size: 150%" class="pixel-text">Level Editor LVL to JSON</p>
+                    <p class="pixel-text">Convert a level made in the game's level editor to a JSON file.</p>
+                    <a href="leveleditorToJson"><div name="RedirectButton" class="generalBoxDiv" style="width: 85%;background-color: rgb(249, 66, 255);"></div></a><br>
+                </div>-->
+                <div name="jsonToSnailax" class="toolDiv" style="width: 25%;">
+                    <p style="font-size: 150%" class="pixel-text">JSON to Snailax LVL</p>
+                    <p class="pixel-text">Convert a JSON file to a level for the mod <a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a>.</p>
+                    <a href="jsonToSnailax"><div name="RedirectButton" class="generalBoxDiv" style="width: 85%;background-color: rgb(249, 66, 255);"></div></a><br>
+                    <small class="pixel-text"><a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a>: <a style="color: Blue;" href="https://github.com/benjaminpants/">MissingTextureMan101</a></small>
+                </div>
+                <!--<div name="jsonToLevelEditor" class="toolDiv" style="width: 25%;">
+                    <p style="font-size: 150%" class="pixel-text">JSON to Level Editor LVL</p>
+                    <p class="pixel-text">Convert a JSON file to a level made for the game's level editor.</p>
+                    <a href="jsonToLevelEditor"><div name="RedirectButton" class="generalBoxDiv" style="width: 85%;background-color: rgb(249, 66, 255);"></div></a><br>
+                </div>-->
+                <!-- close the tool area -->
+                </div>
+                <!-- box footer for epic credits!! -->
+                <!-- <small class="pixel-text" style="color:DodgerBlue">Credits to <a style="color: DodgerBlue;" href="https://github.com/">Username</a> for Reason</small> -->
+            </div>
+            <noscript>
+                <!-- if javascript is disabled, display a red box at the bottom of the page warning that its off -->
+                <div class="errorBox" style="margin-top: 8%;">
+                    <h1 class="pixel-text" style="color:white"><span>Toolsn</span><span style="color:orange">AI</span><span>l may not function correctly without JavaScript enabled! Please go into your site settings and enable it.</span></h1>
+                </div>
+            </noscript>
+        </center>
+    </body>
+</html>

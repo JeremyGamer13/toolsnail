@@ -1,0 +1,188 @@
+<!DOCTYPE HTML>
+<html lang='en'>
+    <head>
+        <title>Toolsnail</title>
+        <link rel="icon" type="image/x-icon" href="/images/?image=wrench">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+        <style>
+            body {
+                background-image: url(/images/?image=sitebg);
+                background-repeat:no-repeat;
+                background-size:cover;
+            }
+            .whiteBox {
+                background-color: white;
+                padding: 20px;
+                border-radius: 25px;
+                width: 65%;
+            }
+            .errorBox {
+                background-color: red;
+                padding: 20px;
+                border-radius: 25px;
+                width: 85%;
+            }
+            .toolDiv {
+                background-color: rgb(253, 188, 255);
+                padding: 20px;
+                border-radius: 25px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+            .generalBoxDiv {
+                padding: 20px;
+                border-radius: 25px;
+            }
+            .pixel-text {
+                font-family: 'Press Start 2P', cursive !important; 
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <img src="/images/?image=logo" class="pixel-text" width="600" alt="ToolsnAIl 🔧" style="color:white;margin-top: 2%">
+            <noscript>
+                <!-- if javascript is disabled, display a red box at the top of the page warning that its off -->
+                <div class="errorBox" style="margin-top: 8%;">
+                    <h1 class="pixel-text" style="color:white"><span>Toolsn</span><span style="color:orange">AI</span><span>l may not function correctly without JavaScript enabled! Please go into your site settings and enable it.</span></h1>
+                </div>
+            </noscript>
+            <div class="whiteBox" style="margin-top: 8%;">
+                <h1 class="pixel-text">JSON to Snailax LVL</h1>
+                <p class="pixel-text">Convert a JSON file to a level for the mod <a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a>.</p>
+                <textarea class="pixel-text" id="levelCode" rows="4" cols="50" placeholder="Insert your level's code here..."></textarea><br>
+                <label class="pixel-text" for="jsonInputLevelFormat">JSON Level Format:</label>
+                <select class="pixel-text" id="jsonInputLevelFormat">
+                    <option value="snailax">Snailax</option>
+                    <!--<option value="leveleditor">Ingame Level Editor</option>-->
+                </select><br>
+                <button class="pixel-text" onclick="startConverting()" type="button" id="startConverting" style="background-color:dodgerblue;color: white;font-size: large;">Convert</button>
+                <br>
+                <p class="pixel-text">Converted Level:</p>
+                <button class="pixel-text" onclick="copyToClipboard()" type="button" id="copyToClipboard" style="background-color:dodgerblue;color: white;font-size: large;">Copy</button>
+                <button class="pixel-text" onclick="downloadAsFile()" type="button" id="downloadAsFile" style="background-color:dodgerblue;color: white;font-size: large;">Download</button>
+                <div style="background-color:black; color:green">
+                    <small><br>
+                        <pre><code id="exportedLevelElement" class="pixel-text" style="font-size:75%">5
+0
+0
+0
+0
+0
+0
+0
+0
+0.01
+0
+1
+1
+0
+0
+0,0,|
+-</code></pre>
+                        <br><br>
+                    </small>
+                </div>
+                <br>
+                <br>
+                <!-- box footer for epic credits!! -->
+                <small class="pixel-text"><a style="color: Blue;" href="https://github.com/benjaminpants/Snailax">Snailax</a>: <a style="color: Blue;" href="https://github.com/benjaminpants/">MissingTextureMan101</a></small>
+                <!-- <small class="pixel-text" style="color:DodgerBlue">Credits to <a style="color: DodgerBlue;" href="https://github.com/">Username</a> for Reason</small> -->
+            </div>
+        </center>
+        <!-- scripts to run when we want to start converting the level -->
+        <script>
+            function startConverting() {
+                let element = document.getElementById("exportedLevelElement")
+                element.innerText = `5
+0
+0
+0
+0
+0
+0
+0
+0
+0.01
+0
+1
+1
+0
+0
+0,0,|
+-`
+                let input = document.getElementById("levelCode").value
+                input = JSON.parse(input)
+                let dropdownelement = document.getElementById("jsonInputLevelFormat");
+                let format = dropdownelement.options[dropdownelement.selectedIndex].value;
+                console.log("Converting JSON format " + format + " to Level Data")
+                // level parser which puts everything into an object
+                let nodes = ["obj_antenna", "obj_antenna_floaty", "obj_antenna_big_range", "obj_power_generator"]
+                let rotatable = ["obj_squasher", "obj_underwater_current", "obj_fish", "obj_door"]
+                let data = `5\n`
+                if (!input) {
+                    alert("This Snailax JSON is not compatible with the level parser. Please re-convert the level in the Snailax to JSON converter and save it again.")
+                    return
+                }
+                if (format == "leveleditor") {
+
+                } else {
+                    data += String(input.options.ground_spike_probability) + "\n"
+                    data += String(input.options.wall_spike_probability) + "\n"
+                    data += String(input.options.ceiling_spike_probability) + "\n"
+                    data += String(input.options.air_cat_probability) + "\n"
+                    data += String(input.options.badball_probability) + "\n"
+                    data += String((input.options.squid_disabled == true ? 1 : 0)) + "\n"
+                    data += String(input.options.ice_spike_falling_probability) + "\n"
+                    data += String(input.options.fireworks_probability) + "\n"
+                    data += String(input.options.conveyor_change_probability) + "\n"
+                    data += String(input.options.laser_probability) + "\n"
+                    data += String(input.options.room_xscale) + "\n"
+                    data += String(input.options.room_yscale) + "\n"
+                    data += String(input.options.song) + "\n"
+                    data += String(input.options.theme) + "\n"
+                    data += `0,0,|\n-`
+                    input.objects.forEach(item => {
+                        data += "\n"
+                        data += item.name
+                        data += ":"
+                        data += item.x
+                        data += ","
+                        data += item.y
+                        data += ","
+                        if (item.rotation != null) {
+                            data += item.rotation
+                            data += ","
+                        }
+                        if (item.doorHeight != null) {
+                            data += item.doorHeight
+                            data += ","
+                        }
+                        if (item.corrupted != null) {
+                            data += (item.corrupted ? 1 : 0)
+                            data += ","
+                        }
+                    })
+                }
+                element.innerText = data
+            }
+            function copyToClipboard() {
+                navigator.clipboard.writeText(document.getElementById("exportedLevelElement").innerText)
+            }
+            function downloadAsFile() {
+                let element = document.createElement('a');
+                let text = document.getElementById("exportedLevelElement").innerText
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+                let dropdownelement = document.getElementById("jsonInputLevelFormat");
+                let format = dropdownelement.options[dropdownelement.selectedIndex].value;
+                element.setAttribute('download', `snailax_${format}.json`);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            }
+        </script>
+    </body>
+</html>
